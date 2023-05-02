@@ -1,0 +1,162 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CMP1903M_A01_2223
+{
+    class Tutorial
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Welcome to the MathsTutor, in this you will be able to test your arithmetic skills in a fun way!");
+            var pack = new Pack();
+            while (true)
+            {
+                showMainMenu();
+                int menuSelection = GetSelection();
+
+                switch (menuSelection)
+                {
+                    case 1:
+                        showInstructions();
+                        break;
+                    case 2:
+                        playGame();
+                        break;
+                    case 3:
+                        Console.WriteLine("Program exiting");
+                        return;
+                    default:
+                        Console.WriteLine("Please make a valid selection");
+                        break;
+                }
+            }
+
+            void showMainMenu()
+            {
+                Console.WriteLine("");
+                Console.WriteLine("MathsTutor Main Menu: ");
+                Console.WriteLine("1. Instructions");
+                Console.WriteLine("2. Play Game");
+                Console.WriteLine("3. Quit");
+            }
+
+            void showInstructions()
+            {
+                Console.WriteLine("For this game you are dealt 3 cards");
+                Console.WriteLine("The first card, you take its number");
+                Console.WriteLine("The second card, you take its suit, each suit correlates to a different operator: ");
+                Console.WriteLine("Hearts : + // Clubs : - // Diamonds : * // Spades : /");
+                Console.WriteLine("The third card, you take its number");
+                Console.WriteLine("Perform the task by putting all 3 together into an equation and give the correct answer");
+            }
+
+            int GetSelection()
+            {
+                string? input = Console.ReadLine();
+
+                if (int.TryParse(input, out int selection))
+                {
+                    return selection;
+                }
+                return 0;
+            }
+
+            void playGame()
+            {
+                Pack.shuffleCardPack(1, pack.deck);
+                Console.WriteLine("You have been dealt 3 cards");
+                Console.WriteLine("Your cards are:");
+                List<Card> dealtCards = Pack.dealCards(3, pack.deck);
+                for (int i = 0; i < dealtCards.Count; i++)
+                {
+                    Console.WriteLine(dealtCards[i].Description());
+                }
+
+
+                Console.WriteLine("Would you like to: ");
+                Console.WriteLine("1. Read the instructions again");
+                Console.WriteLine("2. Make an guess");
+                Console.WriteLine("3. Quit");
+                int menuSelection = GetSelection();
+                int userGuess = 0;
+                switch (menuSelection)
+                {
+                    case 1:
+                        showInstructions();
+                        Console.WriteLine("What is your guess? : ");
+                        userGuess = GetSelection();
+                        break;
+                    case 2:
+                        Console.WriteLine("What is your guess? : ");
+                        userGuess = GetSelection();
+                        break;
+                    case 3:
+                        Console.WriteLine("Program exiting");
+                        return;
+                    default:
+                        Console.WriteLine("Please make a valid selection");
+                        break;
+                }
+
+
+                int num1 = dealtCards[0].Value;
+                int num2 = dealtCards[2].Value;
+                int output = 10000;
+                var eqOperator = dealtCards[1].Suit switch
+                {
+                    1 => "+",
+                    2 => "-",
+                    3 => "*",
+                    _ => "/"
+                };
+                switch (eqOperator)
+                {
+                    case "+":
+                        output = num1 + num2;
+                        break;
+                    case "-":
+                        output = num1 - num2;
+                        break;
+                    case "*":
+                        output = num1 * num2;
+                        break;
+                    case "/":
+                        output = num1 / num2;
+                        break;
+                }
+
+
+                if (userGuess == output)
+                {
+                    Console.WriteLine("Well done, thats correct");
+                }
+                else
+                {
+                    Console.WriteLine("Unlucky, that is not correct");
+                }
+                int replay = 0;
+                Console.WriteLine("Would you like to (1) Play again or (2) View the main menu");
+                replay = GetSelection();
+                switch (replay)
+                {
+                    case 1:
+                        playGame();
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        Console.WriteLine("Please make a valid selection");
+                        break;
+                }
+
+            }
+
+
+
+
+        }
+    }
+}
